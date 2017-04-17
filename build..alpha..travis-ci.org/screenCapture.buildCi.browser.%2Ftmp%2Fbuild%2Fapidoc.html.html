@@ -1,0 +1,461 @@
+<html><head></head><body><div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a href="https://github.com/pgte/konphyg">konphyg (v1.4.0)</a>
+</h1>
+<h4>Cascading configuration files made easy in Node.js.</h4>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.konphyg">module konphyg</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.konphyg.konphyg">
+            function <span class="apidocSignatureSpan"></span>konphyg
+            <span class="apidocSignatureSpan">(basePath, alwaysRequireEnv)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.konphyg.config">
+            function <span class="apidocSignatureSpan">konphyg.</span>config
+            <span class="apidocSignatureSpan">(basePath, alwaysRequireEnv)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.konphyg.load">
+            function <span class="apidocSignatureSpan">konphyg.</span>load
+            <span class="apidocSignatureSpan">(filePath, domain, throwIfNotFound)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.konphyg.merge">
+            function <span class="apidocSignatureSpan">konphyg.</span>merge
+            <span class="apidocSignatureSpan">(a, b)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.konphyg.toString">
+            function <span class="apidocSignatureSpan">konphyg.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.konphyg.load">module konphyg.load</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.konphyg.load.load">
+            function <span class="apidocSignatureSpan">konphyg.</span>load
+            <span class="apidocSignatureSpan">(filePath, domain, throwIfNotFound)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.konphyg.merge">module konphyg.merge</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.konphyg.merge.merge">
+            function <span class="apidocSignatureSpan">konphyg.</span>merge
+            <span class="apidocSignatureSpan">(a, b)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.konphyg.toString">module konphyg.toString</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.konphyg.toString.toString">
+            function <span class="apidocSignatureSpan">konphyg.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.konphyg" id="apidoc.module.konphyg">module konphyg</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.konphyg.konphyg" id="apidoc.element.konphyg.konphyg">
+        function <span class="apidocSignatureSpan"></span>konphyg
+        <span class="apidocSignatureSpan">(basePath, alwaysRequireEnv)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">konphyg = function (basePath, alwaysRequireEnv) {
+  basePath = path.normalize(basePath);
+  var domains = {};
+  var env = process.env.NODE_ENV || 'development';
+  var files = fs.readdirSync(basePath)
+
+  var get = function (domain, requireEnv) {
+    var config;
+
+    // default to global expectation unless specifically overridden.
+    if (requireEnv !== false &amp;&amp; alwaysRequireEnv === true) {
+      requireEnv = true;
+    }
+
+    if (domains.hasOwnProperty(domain)) {
+      return domains[domain];
+    }
+
+    config = merge(
+        load(path.join(basePath, domain + '.json'), domain, true)
+      , load(path.join(basePath, domain + '.' + env + '.json'), domain + "." + env, !!(requireEnv === true))
+    );
+
+    domains[domain] = config;
+
+    return config;
+  }
+
+  get.all = function () {
+    files.forEach(function (file) {
+      if(file.match(/^\./)) return;
+      if(!file.match(/\.json$/i)) return;
+      var domain = file.match(/^(.*?)\./i)[1];
+      if(domains.hasOwnProperty(domain)) return;
+      domains[domain] = merge(
+          load(path.join(basePath, domain + '.json'), domain, true)
+        , load(path.join(basePath, domain + '.' + env + '.json'), domain, false)
+      );
+    });
+
+    return domains;
+  }
+
+  get.clear = function () {
+    domains = {};
+    files = fs.readdirSync(basePath)
+  }
+
+  return get
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.konphyg.config" id="apidoc.element.konphyg.config">
+        function <span class="apidocSignatureSpan">konphyg.</span>config
+        <span class="apidocSignatureSpan">(basePath, alwaysRequireEnv)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">config = function (basePath, alwaysRequireEnv) {
+  basePath = path.normalize(basePath);
+  var domains = {};
+  var env = process.env.NODE_ENV || 'development';
+  var files = fs.readdirSync(basePath)
+
+  var get = function (domain, requireEnv) {
+    var config;
+
+    // default to global expectation unless specifically overridden.
+    if (requireEnv !== false &amp;&amp; alwaysRequireEnv === true) {
+      requireEnv = true;
+    }
+
+    if (domains.hasOwnProperty(domain)) {
+      return domains[domain];
+    }
+
+    config = merge(
+        load(path.join(basePath, domain + '.json'), domain, true)
+      , load(path.join(basePath, domain + '.' + env + '.json'), domain + "." + env, !!(requireEnv === true))
+    );
+
+    domains[domain] = config;
+
+    return config;
+  }
+
+  get.all = function () {
+    files.forEach(function (file) {
+      if(file.match(/^\./)) return;
+      if(!file.match(/\.json$/i)) return;
+      var domain = file.match(/^(.*?)\./i)[1];
+      if(domains.hasOwnProperty(domain)) return;
+      domains[domain] = merge(
+          load(path.join(basePath, domain + '.json'), domain, true)
+        , load(path.join(basePath, domain + '.' + env + '.json'), domain, false)
+      );
+    });
+
+    return domains;
+  }
+
+  get.clear = function () {
+    domains = {};
+    files = fs.readdirSync(basePath)
+  }
+
+  return get
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.konphyg.load" id="apidoc.element.konphyg.load">
+        function <span class="apidocSignatureSpan">konphyg.</span>load
+        <span class="apidocSignatureSpan">(filePath, domain, throwIfNotFound)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">load = function (filePath, domain, throwIfNotFound) {
+  var fileContents, ret;
+
+  try {
+    fileContents = fs.readFileSync(filePath)
+  } catch(err) {
+    if (err.code === 'EBADF' || err.code == 'ENOENT') {
+      if (throwIfNotFound) {
+        throw new Error('Could not find configuration file for ' + domain + ' domain: ' + filePath);
+      }
+      return null;
+    }
+    throw err;
+  }
+  try {
+    ret = JSON.parse(fileContents)
+  } catch(err) {
+    throw new Error('Error parsing JSON file ' + filePath);
+  }
+  return ret;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.konphyg.merge" id="apidoc.element.konphyg.merge">
+        function <span class="apidocSignatureSpan">konphyg.</span>merge
+        <span class="apidocSignatureSpan">(a, b)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function merge(a, b) {
+  var prop, bValue;
+  a = clone(a);
+  b = clone(b);
+
+  if (b === null || b === undefined) {
+    return a;
+  }
+  if (a === null || a === undefined) {
+    return b;
+  }
+
+  for (prop in a) {
+    mergeProperty(a, b, prop);
+  }
+  for (prop in b) {
+    mergeProperty(a, b, prop);
+  }
+
+  // expose merge routine for reuse
+  a._merge = function(b) { return merge(a, b); }
+
+  return a;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.konphyg.toString" id="apidoc.element.konphyg.toString">
+        function <span class="apidocSignatureSpan">konphyg.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">toString = function () {
+    return text;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.konphyg.load" id="apidoc.module.konphyg.load">module konphyg.load</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.konphyg.load.load" id="apidoc.element.konphyg.load.load">
+        function <span class="apidocSignatureSpan">konphyg.</span>load
+        <span class="apidocSignatureSpan">(filePath, domain, throwIfNotFound)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">load = function (filePath, domain, throwIfNotFound) {
+  var fileContents, ret;
+
+  try {
+    fileContents = fs.readFileSync(filePath)
+  } catch(err) {
+    if (err.code === 'EBADF' || err.code == 'ENOENT') {
+      if (throwIfNotFound) {
+        throw new Error('Could not find configuration file for ' + domain + ' domain: ' + filePath);
+      }
+      return null;
+    }
+    throw err;
+  }
+  try {
+    ret = JSON.parse(fileContents)
+  } catch(err) {
+    throw new Error('Error parsing JSON file ' + filePath);
+  }
+  return ret;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.konphyg.merge" id="apidoc.module.konphyg.merge">module konphyg.merge</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.konphyg.merge.merge" id="apidoc.element.konphyg.merge.merge">
+        function <span class="apidocSignatureSpan">konphyg.</span>merge
+        <span class="apidocSignatureSpan">(a, b)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function merge(a, b) {
+  var prop, bValue;
+  a = clone(a);
+  b = clone(b);
+
+  if (b === null || b === undefined) {
+    return a;
+  }
+  if (a === null || a === undefined) {
+    return b;
+  }
+
+  for (prop in a) {
+    mergeProperty(a, b, prop);
+  }
+  for (prop in b) {
+    mergeProperty(a, b, prop);
+  }
+
+  // expose merge routine for reuse
+  a._merge = function(b) { return merge(a, b); }
+
+  return a;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.konphyg.toString" id="apidoc.module.konphyg.toString">module konphyg.toString</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.konphyg.toString.toString" id="apidoc.element.konphyg.toString.toString">
+        function <span class="apidocSignatureSpan">konphyg.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function toString() { [native code] }</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
+</body></html>
