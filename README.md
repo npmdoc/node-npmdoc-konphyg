@@ -1,4 +1,7 @@
-# api documentation for  [konphyg (v1.4.0)](https://github.com/pgte/konphyg)  [![npm package](https://img.shields.io/npm/v/npmdoc-konphyg.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-konphyg) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-konphyg.svg)](https://travis-ci.org/npmdoc/node-npmdoc-konphyg)
+# npmdoc-konphyg
+
+#### api documentation for  [konphyg (v1.4.0)](https://github.com/pgte/konphyg)  [![npm package](https://img.shields.io/npm/v/npmdoc-konphyg.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-konphyg) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-konphyg.svg)](https://travis-ci.org/npmdoc/node-npmdoc-konphyg)
+
 #### Cascading configuration files made easy in Node.js.
 
 [![NPM](https://nodei.co/npm/konphyg.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/konphyg)
@@ -58,7 +61,8 @@
         "configuration",
         "environments"
     ],
-    "version": "1.4.0"
+    "version": "1.4.0",
+    "bin": {}
 }
 ```
 
